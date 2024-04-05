@@ -1,15 +1,20 @@
 import { lazy } from 'react';
 
 const Home = lazy(() => import('../components/Home/Home'));
+const Products = lazy(() => import('../components/Products/Products'));
 
 export const ALL_ROUTES_PATHS = {
-  HOME: '/'
+  HOME: '/',
+  PRODUCTS: '/products'
 };
 
 export const ALL_ROUTES = [
   {
     pathName: ALL_ROUTES_PATHS.HOME,
-    Component: Home,
-    heading: 'Landing'
+    Component: Home
+  },
+  {
+    pathName: ALL_ROUTES_PATHS.PRODUCTS,
+    Component: Products
   }
 ];

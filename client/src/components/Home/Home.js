@@ -1,12 +1,11 @@
 import Banner from '../shared/Banner/Banner';
-import ProductsList from './ProductsList/ProductsList';
+import TrendingList from './TrendingList/TrendingList';
 
 const Home = () => {
-  console.log('assetManager');
   return (
     <div>
       <Banner />
-      <ProductsList />
+      <TrendingList />
     </div>
   );
 };

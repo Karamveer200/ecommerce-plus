@@ -1,7 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { assetManager } from '../../../assets/assetManager';
+import { useNavigate } from 'react-router-dom';
+
+import { ALL_ROUTES_PATHS } from '../../../config/routes';
 
 const Banner = () => {
+  const navigate = useNavigate();
+
   const images = [
     assetManager.clothing.whiteHoodie,
     assetManager.footWear.redShoe,
@@ -46,10 +51,12 @@ const Banner = () => {
         <p className="text-sm md:text-xl lg:text-3xl xl:text-5xl mt-2 md:mt-10 font-bold text-white">
           We have got you covered
         </p>
+
         <button
+          onClick={() => navigate(ALL_ROUTES_PATHS.PRODUCTS)}
           className="text-white font-bold bg-blue-500 md:px-10 md:py-4 px-4 py-2 shadow-lg rounded-full my-10 hover:shadow-xl
         hover:scale-110 transition duration-300 hover:text-gray-900 hover:bg-blue-400">
-          Explore Below
+          Explore More
         </button>
       </div>
     </div>
