@@ -33,30 +33,3 @@ export const convertTimeToMomentFormat = (timeStamp) => {
 
   return { date, time };
 };
-
-export const parseLocalStorageToArray = (key) => {
-  try {
-    const getExistingRecipes = localStorage.getItem(key);
-    return JSON.parse(getExistingRecipes) || [];
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const isArrayReady = (arr) => {
-  return isArray(arr) ? arr : [];
-};
-
-export const removeDuplicates = (arr) => {
-  const seen = new Set();
-  const filteredArr = arr.filter((obj) => {
-    if (seen.has(obj.value)) {
-      return false;
-    } else {
-      seen.add(obj.value);
-      return true;
-    }
-  });
-
-  return filteredArr;
-};
