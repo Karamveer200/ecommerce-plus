@@ -16,15 +16,14 @@
 * {
   box-sizing: border-box;
   line-height: 120% !important;
-  font-family: 'Montserrat', cursive;
+  font-family: 'Inter', cursive;
   letter-spacing: 2px;
 }
 
 button,
 p {
-  font-family: 'Montserrat', cursive !important;
+  font-family: 'Inter', cursive !important;
   letter-spacing: 2px !important;
-  color: #fff !important;
 }
 
 html,
@@ -38,4 +37,82 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', cursive;
+}
+
+.marginTopRoot {
+  margin-top: var(--navbarHeight);
+}
+
+.fadeInHalfSecond {
+  z-index: 1;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
+.fadeInOneSecond {
+  z-index: 1;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 1s;
+}
+
+.fadeIn {
+  z-index: 1;
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 1.5s;
+}
+
+.fadeOut {
+  z-index: 1;
+  transition: all 500ms ease-out;
+  animation: fadeOut ease-out 1;
+  animation-fill-mode: forwards;
+  animation-duration: 2s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.toastStyles {
+  margin-top: 50px !important;
+}
+
+.toastStyles > div {
+  margin-left: -80px !important;
+}
+
+@media screen and (max-width: 640px) {
+  .toastStyles {
+    margin-top: 100px !important;
+  }
+
+  .toastStyles {
+    width: 280px !important;
+    left: auto !important;
+    right: 1em !important;
+  }
+
+  .toastStyles > div {
+    margin-left: 0px !important;
+  }
 }
