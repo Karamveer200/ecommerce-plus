@@ -8,7 +8,6 @@ const Banner = () => {
   const navigate = useNavigate();
 
   const images = [
-    assetManager.clothing.whiteHoodie,
     assetManager.footWear.redShoe,
     assetManager.electronics.hardDrive,
     assetManager.electronics.speakers,
