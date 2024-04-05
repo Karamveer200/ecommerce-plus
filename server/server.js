@@ -2,8 +2,12 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
+const configurations = require('./config/index');
+const { initializePgConnection, loadBatisMappers } = require('./utils/database/database');
 
-const configurations = {};
+loadBatisMappers();
+initializePgConnection();
+// executeDbSetupQuery();
 
 app.use(cors());
 
@@ -25,4 +29,16 @@ const PORT = configurations.PORT || 3000;
 
 app.listen(PORT, function () {
   console.log(`Server started on PORT ${PORT}`);
+});
+
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  await closePool();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT signal received: closing HTTP server');
+  await closePool();
+  process.exit(0);
 });

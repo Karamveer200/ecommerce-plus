@@ -16,24 +16,23 @@ import whiteSlipper from './Products/shoes/whiteSlipper.png';
 import yellowShoe from './Products/shoes/yellowShoe.png';
 
 export const productAssetManager = Object.freeze({
-  clothing: {
-    blueShirt,
-    yellowShirt2: yellowShirt,
-    whiteHoodie,
-    yellowShirt
+  CLOTHING: {
+    BLUE_SHIRT: blueShirt,
+    YELLOW_SHIRT_2: yellowShirt,
+    WHITE_HOODIE: whiteHoodie,
+    YELLOW_SHIRT: yellowShirt
   },
-  electronics: {
-    mobile,
-    speakers,
-    adapter,
-    hardDrive
+  ELECTRONICS: {
+    MOBILE: mobile,
+    SPEAKERS: speakers,
+    ADAPTER: adapter,
+    HARD_DRIVE: hardDrive
   },
-  footWear: {
-    blackBoots,
-    blackShoes,
-    redShoe,
-    whiteSlipper,
-    yellowShoe
+  FOOT_WEAR: {
+    BLACK_SHOES: blackShoes,
+    RED_SHOE: redShoe,
+    WHITE_SLIPPER: whiteSlipper,
+    YELLOW_SHOW: yellowShoe
   }
 });
 

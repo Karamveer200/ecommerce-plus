@@ -1,0 +1,43 @@
+ CREATE SCHEMA IF NOT EXISTS shop_zone;
+
+ CREATE TABLE IF NOT EXISTS shop_zone.CATEGORY (
+   category_id   SERIAL PRIMARY KEY,
+   title         TEXT NOT NULL,
+   type          TEXT NOT NULL,
+   created_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+   updated_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+ );
+
+ CREATE TABLE IF NOT EXISTS shop_zone.PRODUCTS (
+   product_id         SERIAL PRIMARY KEY,
+   category_id        INTEGER NOT NULL,
+   name               TEXT NOT NULL,
+   quantity           INTEGER NOT NULL,
+   price              INTEGER NOT NULL,
+   image_identifier   TEXT NOT NULL,
+   stars              INTEGER NOT NULL,
+   FOREIGN KEY (category_id) REFERENCES shop_zone.CATEGORY(category_id)
+ );
+ 
+INSERT INTO shop_zone.CATEGORY (TITLE, TYPE)                                                      
+VALUES
+    ('Foot wear', 'FOOT_WEAR'),
+    ('Clothing', 'CLOTHING'),
+    ('Electronics', 'ELECTRONICS');
+
+INSERT INTO shop_zone.PRODUCTS (category_id, name, image_identifier, price, quantity, stars)                                                      
+VALUES
+    (1, 'Nike Air Black', 'BLACK_SHOES', 120, 7, 5),
+    (1, 'Red Rose Preium', 'RED_SHOE', 220, 2, 4),
+    (1, 'Winner Comfy', 'WHITE_SLIPPER', 50, 0, 3),
+    (1, 'Jordan Royal Yellow', 'YELLOW_SHOW', 150, 22, 4),
+    (2, 'Mark Teen Blue', 'BLUE_SHIRT', 100, 22, 4),
+    (2, 'Armaani Deluxe Yellow', 'YELLOW_SHIRT_2', 90, 9, 4),
+    (2, 'Gucci Classic Hoodie', 'WHITE_HOODIE', 60, 3, 5),
+    (2, 'K-POP Luxury', 'YELLOW_SHIRT', 500, 0, 5),
+    (3, 'IPhone 20 Ultra Pro Max', 'MOBILE', 3000, 12, 5),
+    (3, 'BOSS Premium', 'SPEAKERS', 500, 35, 4),
+    (3, 'Apple Charger', 'ADAPTER', 60, 8, 5),
+    (3, 'Passport SSD 1TB', 'HARD_DRIVE', 120, 6, 3);
+    
+

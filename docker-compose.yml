@@ -8,6 +8,8 @@ services:
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
 
   server:
     image: shop-zone:latest
