@@ -1,24 +1,16 @@
 import { useEffect, useState, useCallback } from 'react';
-import hero from '../../../assets/hero.jpg';
-import whiteHoodie from '../../../assets/Products/clothing/whiteHoodie.png';
-import blueShirt from '../../../assets/Products/clothing/blueShirt.png';
-import mobile from '../../../assets/Products/electronics/mobile.png';
-import hardDrive from '../../../assets/Products/electronics/harddrive.png';
-import speakers from '../../../assets/Products/electronics/speakers.png';
-import yellowShoe from '../../../assets/Products/shoes/yellowShoe.png';
-import redShoe from '../../../assets/Products/shoes/redShoe.png';
-import whiteSlipper from '../../../assets/Products/shoes/whiteSlipper.png';
+import { assetManager } from '../../../assets/assetManager';
 
 const Banner = () => {
   const images = [
-    whiteHoodie,
-    redShoe,
-    hardDrive,
-    speakers,
-    blueShirt,
-    yellowShoe,
-    mobile,
-    whiteSlipper
+    assetManager.clothing.whiteHoodie,
+    assetManager.footWear.redShoe,
+    assetManager.electronics.hardDrive,
+    assetManager.electronics.speakers,
+    assetManager.clothing.blueShirt,
+    assetManager.footWear.yellowShoe,
+    assetManager.electronics.mobile,
+    assetManager.footWear.whiteSlipper
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -43,7 +35,7 @@ const Banner = () => {
   return (
     <div
       className={`relative h-[300px] sm:h-[400px] lg:h-[550px] xl:h-[750px] font-inter -mt-20 fadeInOneSecond`}>
-      <img src={hero} alt="Logo" />
+      <img src={assetManager.hero} alt="Logo" />
 
       <RenderHeroImage />
 

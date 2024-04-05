@@ -13,7 +13,7 @@ const Header = () => {
       : loginWithRedirect();
 
   return (
-    <header className="sticky top-0 z-50 grid grid-cols-3 backdrop-blur-3xl shadow-md py-3 px-2 md:px-10 border-b-2 border-b-slate-100">
+    <header className="sticky top-0 z-50 grid grid-cols-3 items-center backdrop-blur-3xl shadow-md py-3 px-2 md:px-10 border-b-2 border-b-slate-100">
       <div className="relative flex h-10 cursor-pointer items-center gap-[20px]">
         <img src={logo} alt="Logo" className="w-[55px] h-[55px] rounded-full" />
         <p className="font-bold text-2xl text-indigo-100">Shop Zone</p>
