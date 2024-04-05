@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import {
-  GlobeAltIcon,
-  Bars2Icon,
-  UserCircleIcon,
-  MagnifyingGlassIcon
-} from '@heroicons/react/24/solid';
+import { UserCircleIcon, MagnifyingGlassIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
 import logo from '../../../assets/logo.webp';
+import useUser from '../../../hooks/useUser';
 
 const Header = () => {
   const [searchInput, setSearchInput] = useState('');
+  const { userData, loginWithRedirect, logout } = useUser();
+
+  const handleAuthBtnClick = () =>
+    userData
+      ? logout({ logoutParams: { returnTo: process.env.REACT_APP_REDIRECT_URI } })
+      : loginWithRedirect();
 
   return (
     <header className="sticky top-0 z-50 grid grid-cols-3 backdrop-blur-3xl shadow-md py-3 px-2 md:px-10 border-b-2 border-b-slate-100">
@@ -30,11 +32,18 @@ const Header = () => {
       </div>
 
       <div className="flex space-x-4 items-center justify-end text-gray-600 font-inter">
-        <button className="hidden md:flex space-x-4 items-center bg-blue-500 hover:bg-blue-400 group transition-all duration-150 ease-in px-4 py-1 rounded-full border-2 border-gray-600">
+        <button
+          className="hidden md:flex space-x-4 items-center bg-blue-500 hover:bg-blue-400 group transition-all duration-150 ease-in px-4 py-1 rounded-full border-2 border-gray-600"
+          onClick={handleAuthBtnClick}>
           <p className=" md:text-xs lg:text-lg text-white font-semibold pl-[10px] group-hover:text-gray-900">
-            Login / Signup
+            {userData ? `${userData.name}, Logout` : 'Login / Signup'}
           </p>
-          <UserCircleIcon className="h-10 text-white group-hover:text-gray-900" />
+
+          {userData ? (
+            <UserCircleIcon className="h-10 text-white group-hover:text-gray-900" />
+          ) : (
+            <ShieldCheckIcon className="h-8 text-white group-hover:text-gray-900" />
+          )}
         </button>
       </div>
     </header>

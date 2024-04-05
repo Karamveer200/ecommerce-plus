@@ -7,7 +7,6 @@ import { scrollToTop } from './utils/helperFunctions';
 import ToastWrapper from './components/shared/ToastWrapper/ToastWrapper';
 import { ALL_ROUTES } from './config/routes';
 import { API_HEADER_KEYS } from './utils/constants';
-// import useUser from './hooks/useUser';
 
 const App = () => {
   const { isAuthenticated, isLoading, getAccessTokenSilently } = {};

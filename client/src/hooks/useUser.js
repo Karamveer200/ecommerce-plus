@@ -2,7 +2,14 @@ import { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const useUser = () => {
-  const { isAuthenticated, getIdTokenClaims, isLoading, getAccessTokenSilently } = useAuth0();
+  const {
+    isAuthenticated,
+    getIdTokenClaims,
+    isLoading,
+    getAccessTokenSilently,
+    loginWithRedirect,
+    logout
+  } = useAuth0();
 
   const [userData, setUserData] = useState();
 
@@ -20,7 +27,14 @@ const useUser = () => {
     isAuthenticated && decodeUserId();
   }, [isAuthenticated]);
 
-  return { userData, isAuthenticated, isLoading, getAccessTokenSilently };
+  return {
+    userData,
+    isAuthenticated,
+    isLoading,
+    getAccessTokenSilently,
+    loginWithRedirect,
+    logout
+  };
 };
 
 export default useUser;
