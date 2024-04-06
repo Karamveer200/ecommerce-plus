@@ -1,10 +1,10 @@
 import React from 'react';
 import Spinner from '../Spinner/Spinner';
 
-const FallbackLoader = () => {
+const FallbackLoader = ({ isTransparent }) => {
   return (
-    <div className="h-screen w-full">
-      <div className="h-[calc(100%-300px)] w-full">
+    <div className={`relative w-full ${isTransparent ? 'bg-transparent' : ''}`}>
+      <div className="absolute z-20 w-full h-screen">
         <Spinner center />
       </div>
     </div>

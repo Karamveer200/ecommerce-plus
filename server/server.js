@@ -17,6 +17,8 @@ app.get('/api/health', async (req, res) => {
   res.send(`Node app is running on ${configurations.NODE_ENV} environment`);
 });
 
+app.use('/api/products', require('./routes/products'));
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 

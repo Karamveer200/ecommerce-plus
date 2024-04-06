@@ -6,10 +6,26 @@ import api from './config/services/api';
 import { scrollToTop } from './utils/helperFunctions';
 import ToastWrapper from './components/shared/ToastWrapper/ToastWrapper';
 import { ALL_ROUTES } from './config/routes';
+import { UserContext } from './context/UserContext';
+import { useContext } from 'react';
 import { API_HEADER_KEYS } from './utils/constants';
+import { useProductsGlobalValue } from './store/StateProvider';
+import { useGetAllProducts } from './hooks/useGetAllProducts';
+import { ACTION_TYPES } from './utils/constants';
 
 const App = () => {
-  const { isAuthenticated, isLoading, getAccessTokenSilently } = {};
+  const [, dispatch] = useProductsGlobalValue();
+
+  const { isAllProductsFetching } = useGetAllProducts({
+    onSuccess: (products) => {
+      dispatch({
+        type: ACTION_TYPES.SET_ALL_PRODUCTS,
+        products
+      });
+    }
+  });
+
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useContext(UserContext);
 
   const { pathname } = useLocation();
 
@@ -41,16 +57,12 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
-  if (isLoading) {
-    return (
-      <div className="w-[100vw] h-[100vh] bg-tama_yellow flex flex-col">
-        <FallbackLoader />
-      </div>
-    );
-  }
+  const isLoadingScreen = isAllProductsFetching || isLoading;
 
   return (
     <div>
+      {isLoadingScreen && <FallbackLoader isTransparent />}
+
       <ToastWrapper />
       <Header />
 

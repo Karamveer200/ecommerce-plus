@@ -30,13 +30,13 @@ VALUES
     (1, 'Nike Air Black', 'BLACK_SHOES', 120, 7, 5),
     (1, 'Red Rose Preium', 'RED_SHOE', 220, 2, 4),
     (1, 'Winner Comfy', 'WHITE_SLIPPER', 50, 0, 3),
-    (1, 'Jordan Royal Yellow', 'YELLOW_SHOW', 150, 22, 4),
-    (2, 'Mark Teen Blue', 'BLUE_SHIRT', 100, 22, 4),
+    (1, 'Jordan Royal Yellow', 'YELLOW_SHOW', 150, 9, 4),
+    (2, 'Mark Teen Blue', 'BLUE_SHIRT', 100, 8, 4),
     (2, 'Armaani Deluxe Yellow', 'YELLOW_SHIRT_2', 90, 9, 4),
     (2, 'Gucci Classic Hoodie', 'WHITE_HOODIE', 60, 3, 5),
     (2, 'K-POP Luxury', 'YELLOW_SHIRT', 500, 0, 5),
-    (3, 'IPhone 20 Ultra Pro Max', 'MOBILE', 3000, 12, 5),
-    (3, 'BOSS Premium', 'SPEAKERS', 500, 35, 4),
+    (3, 'IPhone 20 Pro Max', 'MOBILE', 3000, 12, 5),
+    (3, 'BOSS Premium', 'SPEAKERS', 500, 6, 4),
     (3, 'Apple Charger', 'ADAPTER', 60, 8, 5),
     (3, 'Passport SSD 1TB', 'HARD_DRIVE', 120, 6, 3);
     

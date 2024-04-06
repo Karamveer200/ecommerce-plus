@@ -1,13 +1,15 @@
 import { UserCircleIcon, ShieldCheckIcon } from '@heroicons/react/24/solid';
 import logo from '../../../assets/logo.webp';
-import useUser from '../../../hooks/useUser';
 import { Link, useLocation } from 'react-router-dom';
 import { ALL_ROUTES_PATHS } from '../../../config/routes';
+import { useProductsGlobalValue } from '../../../store/StateProvider';
+import { useContext } from 'react';
+import { UserContext } from '../../../context/UserContext';
 
 const Header = () => {
   const { pathname } = useLocation();
 
-  const { userData, loginWithRedirect, logout } = useUser();
+  const { userData, loginWithRedirect, logout } = useContext(UserContext);
 
   const handleAuthBtnClick = () =>
     userData

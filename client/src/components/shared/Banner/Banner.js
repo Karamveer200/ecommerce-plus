@@ -8,13 +8,13 @@ const Banner = () => {
   const navigate = useNavigate();
 
   const images = [
-    assetManager.footWear.redShoe,
-    assetManager.electronics.hardDrive,
-    assetManager.electronics.speakers,
-    assetManager.clothing.blueShirt,
-    assetManager.footWear.yellowShoe,
-    assetManager.electronics.mobile,
-    assetManager.footWear.whiteSlipper
+    assetManager.FOOT_WEAR.RED_SHOE,
+    assetManager.ELECTRONICS.HARD_DRIVE,
+    assetManager.ELECTRONICS.SPEAKERS,
+    assetManager.CLOTHING.BLUE_SHIRT,
+    assetManager.FOOT_WEAR.YELLOW_SHOW,
+    assetManager.ELECTRONICS.MOBILE,
+    assetManager.FOOT_WEAR.WHITE_SLIPPER
   ];
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

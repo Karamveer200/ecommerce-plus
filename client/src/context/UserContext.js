@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const useUser = () => {
+export const UserContext = createContext();
+
+const UserContextComponent = (props) => {
   const {
     isAuthenticated,
     getIdTokenClaims,
@@ -27,14 +29,19 @@ const useUser = () => {
     isAuthenticated && decodeUserId();
   }, [isAuthenticated]);
 
-  return {
-    userData,
-    isAuthenticated,
-    isLoading,
-    getAccessTokenSilently,
-    loginWithRedirect,
-    logout
-  };
+  return (
+    <UserContext.Provider
+      value={{
+        userData,
+        isAuthenticated,
+        isLoading,
+        getAccessTokenSilently,
+        loginWithRedirect,
+        logout
+      }}>
+      {props.children}
+    </UserContext.Provider>
+  );
 };
 
-export default useUser;
+export default UserContextComponent;

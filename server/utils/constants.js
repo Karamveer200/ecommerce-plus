@@ -11,9 +11,12 @@ const NODE_ENVS = {
   production: 'production',
 };
 
-const MAPPER_NAMESPACES = {};
+const MAPPER_NAMESPACES = { products: 'products' };
 
-const QUERIES = {};
+const QUERIES = {
+  getAllProductsWithCategories: 'getAllProductsWithCategories',
+  getAllCategories: 'getAllCategories',
+};
 
 module.exports = {
   ARRAY_KEYS,

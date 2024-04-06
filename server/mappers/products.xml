@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="products">  
+    <select id="getAllProductsWithCategories">
+        SELECT 
+            P.product_id, 
+            P.name AS product_name,
+            P.quantity,
+            P.image_identifier,
+            P.stars,
+            P.price,
+            C.TYPE AS category_type,
+            C.TITLE AS category_title
+        FROM 
+            shop_zone.PRODUCTS AS P
+        JOIN 
+            shop_zone.CATEGORY AS C 
+            ON P.category_id = C.category_id;
+    </select>
+    
+    <select id="getAllCategories">
+        SELECT category_id, TITLE, TYPE FROM shop_zone.CATEGORY;
+    </select>     
+</mapper>
