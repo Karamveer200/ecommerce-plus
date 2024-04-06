@@ -10,7 +10,9 @@ const sortingOptions = [
   { value: 0, key: 'name', label: 'Name / Ascending', isAscending: true },
   { value: 1, key: 'name', label: 'Name / Descending', isAscending: false },
   { value: 2, key: 'price', label: 'Price / Ascending', isAscending: true },
-  { value: 3, key: 'price', label: 'Price / Descending', isAscending: false }
+  { value: 3, key: 'price', label: 'Price / Descending', isAscending: false },
+  { value: 4, key: 'stars', label: 'Stars / Ascending', isAscending: true },
+  { value: 5, key: 'stars', label: 'Stars / Descending', isAscending: false }
 ];
 
 const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {

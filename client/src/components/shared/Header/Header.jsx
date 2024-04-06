@@ -29,7 +29,7 @@ const Header = () => {
           className={`font-extrabold text-3xl ${
             pathname === ALL_ROUTES_PATHS.HOME ? 'text-blue-500' : 'text-white'
           } `}>
-          Shop Zone
+          Valmart
         </p>
       </Link>
 
