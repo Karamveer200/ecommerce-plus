@@ -33,8 +33,6 @@ const ProductsList = () => {
     [filteredProducts]
   );
 
-  console.log('groupedProductAndCategory', groupedProductAndCategory, filteredProducts);
-
   const renderProducts = () => {
     const categories = Object.keys(groupedProductAndCategory) || [];
 

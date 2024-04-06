@@ -1,33 +1,36 @@
 # Stage 1: Build React frontend
 FROM node:18 as build-stage
 
-WORKDIR /app
+WORKDIR /app/client
 
-COPY client/package*.json ./client/
+COPY client/package*.json ./
 
-RUN cd client && npm install
+RUN npm install
 
-COPY client/ ./client/
+COPY client/ .
 
 # Build the React app
-RUN cd client && npm run build
+RUN npm run build
 
 # Stage 2: Set up the server environment
 FROM node:18
 
 WORKDIR /app
 
-COPY server/package*.json ./server
+# Copy server package.json and install server dependencies
+COPY server/package*.json ./server/
+RUN cd server && npm install
 
-RUN npm install
+# Copy the built React app from the previous stage
+COPY --from=build-stage /app/client/build ./server/client/build
 
-COPY --from=build-stage /app/client/build ./client/build
-
-COPY . .
+# Copy the rest of the server code
+COPY server/ ./server/
 
 # Set environment variable
 ENV NODE_ENV=production
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+# Use CMD to run your server, you might need to adjust the path and command
+CMD ["node", "server/server.js"]

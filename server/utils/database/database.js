@@ -1,5 +1,6 @@
 const knex = require('knex');
 const fs = require('fs');
+const path = require('path');
 
 const { getPoolConfigurations } = require('./dbConfig');
 const mybatisMapper = require('mybatis-mapper');
@@ -66,48 +67,11 @@ const executeQuery = async (mapperNamespace, sqlId, params = {}) => {
   }
 };
 
-const executeDbSetupQuery = async (mapperNamespace, sqlId, params = {}) => {
-  console.log('Executing Db Setup Query');
-
-  try {
-    const connection = await getDbConnection();
-    // Define your SQL query for creating schema and tables
-    const createSchemaAndTablesSQL = `
- CREATE SCHEMA IF NOT EXISTS shop_zone;
-
- CREATE TABLE IF NOT EXISTS shop_zone.CATEGORY (
-   category_id   SERIAL PRIMARY KEY,
-   title         TEXT NOT NULL,
-   type          TEXT NOT NULL,
-   created_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-   updated_at    TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
- );
-
- CREATE TABLE IF NOT EXISTS shop_zone.PRODUCTS (
-   product_id SERIAL PRIMARY KEY,
-   category_id     INTEGER NOT NULL,
-   name          TEXT NOT NULL,
-   quantity      TEXT NOT NULL,
-   image_identifier   TEXT NOT NULL,
-   stars   INTEGER NOT NULL,
-   FOREIGN KEY (category_id) REFERENCES shop_zone.CATEGORY(category_id)
- );
-`;
-
-    // Execute the SQL query
-    await connection.raw(createSchemaAndTablesSQL);
-    console.log('Schema and tables created/verified successfully');
-  } catch (error) {
-    console.log(`Database Error: ${error}`);
-    throw new Error();
-  }
-};
-
 const loadBatisMappers = () => {
-  let files = fs.readdirSync(`../server/mappers`);
+  let files = fs.readdirSync(path.join(__dirname, '..', '..', 'mappers'));
 
   let mappers = files.map((file) => {
-    let filepath = `../server/mappers/${file}`;
+    let filepath = path.join(__dirname, '..', '..', 'mappers', file);
     console.log(`loading mapper: ${filepath}`);
     return filepath;
   });
@@ -116,4 +80,4 @@ const loadBatisMappers = () => {
   console.log(`Mappers initialized successfully`);
 };
 
-module.exports = { initializePgConnection, executeQuery, loadBatisMappers, executeDbSetupQuery, closePool };
+module.exports = { initializePgConnection, executeQuery, loadBatisMappers, closePool };

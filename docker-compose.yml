@@ -12,7 +12,7 @@ services:
       - ./init:/docker-entrypoint-initdb.d
 
   server:
-    image: shop-zone:latest
+    image: valmart:latest
     build: .
     ports:
       - '3000:3000'
