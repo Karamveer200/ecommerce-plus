@@ -13,12 +13,12 @@ const Spinner = ({ center, transparentCenter, className }) => {
       <Oval
         height={65}
         width={65}
-        color="#e3d5f1"
+        color="#222831"
         wrapperStyle={{}}
         wrapperClass=""
         visible={true}
         ariaLabel="oval-loading"
-        secondaryColor="#15F5BA"
+        secondaryColor="#161A30"
         strokeWidth={5}
         strokeWidthSecondary={5}
       />

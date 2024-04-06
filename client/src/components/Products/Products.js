@@ -1,29 +1,49 @@
 import Categories from '../shared/Categories/Categories';
 import { useMemo } from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import FilterSection from './FilterSection/FilterSection';
-import { useProductsGlobalValue } from '../../store/StateProvider';
 import { useGetAllCategories } from '../../hooks/useGetAllCategories';
+import { useGetAllProducts } from '../../hooks/useGetAllProducts';
 
 export const PRODUCTS_TABS_TYPE = {
   GRID: 0,
   LIST: 1
 };
 
+export const SORTING_OPTIONS = [
+  { value: 0, key: 'name', label: 'Name / Ascending', isAscending: true },
+  { value: 1, key: 'name', label: 'Name / Descending', isAscending: false },
+  { value: 2, key: 'price', label: 'Price / Ascending', isAscending: true },
+  { value: 3, key: 'price', label: 'Price / Descending', isAscending: false },
+  { value: 4, key: 'stars', label: 'Stars / Ascending', isAscending: true },
+  { value: 5, key: 'stars', label: 'Stars / Descending', isAscending: false }
+];
+
+export const CATEGORY_DEFAULT_OPTIONS = { label: 'All', value: 'ALL' };
+
 const ProductsList = () => {
-  const [{ inStockProducts, basket }] = useProductsGlobalValue();
+  const [filters, setFilters] = useState({
+    searchInput: '',
+    sortType: SORTING_OPTIONS[0],
+    categoryFilter: CATEGORY_DEFAULT_OPTIONS
+  });
+  console.log('filters', filters);
+
+  const { allProducts: filteredProducts, isAllProductsFetching } = useGetAllProducts({
+    params: {
+      searchInput: filters.searchInput,
+      sortKey: filters.sortType.key,
+      sortOrder: filters.sortType.isAscending ? 'ASC' : 'DESC',
+      categoryType:
+        filters.categoryFilter.value === CATEGORY_DEFAULT_OPTIONS.value
+          ? ''
+          : filters.categoryFilter.value
+    }
+  });
+
   const { allCategories, isAllCategoriesFetching } = useGetAllCategories();
 
-  const [filteredProducts, setFilteredProducts] = useState([]);
-
   const [layoutTab, setLayoutTab] = useState(PRODUCTS_TABS_TYPE.LIST);
-
-  useEffect(() => {
-    if (inStockProducts) {
-      const filterInStockItems = inStockProducts.filter((item) => !!item.quantity);
-      setFilteredProducts(filterInStockItems);
-    }
-  }, [inStockProducts]);
 
   const groupedProductAndCategory = useMemo(
     () =>
@@ -39,7 +59,7 @@ const ProductsList = () => {
   );
 
   const renderProducts = () => {
-    const categories = Object.keys(groupedProductAndCategory) || [];
+    const categories = Object.keys(groupedProductAndCategory || {});
 
     return (
       <div
@@ -66,8 +86,9 @@ const ProductsList = () => {
         <FilterSection
           layoutTab={layoutTab}
           setLayoutTab={setLayoutTab}
-          setFilteredProducts={setFilteredProducts}
           allCategories={allCategories}
+          filters={filters}
+          setFilters={setFilters}
         />
 
         {renderProducts()}

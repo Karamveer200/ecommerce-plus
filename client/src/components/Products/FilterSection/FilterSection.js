@@ -1,55 +1,9 @@
 import TabsButton from '../../shared/Button/TabsButton';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { useState, useEffect } from 'react';
-import { PRODUCTS_TABS_TYPE } from '../Products';
-import { useProductsGlobalValue } from '../../../store/StateProvider';
+import { PRODUCTS_TABS_TYPE, SORTING_OPTIONS, CATEGORY_DEFAULT_OPTIONS } from '../Products';
 import Select from 'react-select';
-import { ACTION_TYPES } from '../../../utils/constants';
 
-const sortingOptions = [
-  { value: 0, key: 'name', label: 'Name / Ascending', isAscending: true },
-  { value: 1, key: 'name', label: 'Name / Descending', isAscending: false },
-  { value: 2, key: 'price', label: 'Price / Ascending', isAscending: true },
-  { value: 3, key: 'price', label: 'Price / Descending', isAscending: false },
-  { value: 4, key: 'stars', label: 'Stars / Ascending', isAscending: true },
-  { value: 5, key: 'stars', label: 'Stars / Descending', isAscending: false }
-];
-
-const CATEGORY_DEFAULT_OPTIONS = { label: 'All', value: 'ALL' };
-
-const FilterSection = ({ layoutTab, setLayoutTab, allCategories = [], setFilteredProducts }) => {
-  const [{ inStockProducts }, dispatch] = useProductsGlobalValue();
-
-  const [searchInput, setSearchInput] = useState('');
-  const [sortType, setSortType] = useState(sortingOptions[0]);
-
-  const [categoryFilter, setCategoryFilter] = useState(CATEGORY_DEFAULT_OPTIONS);
-
-  useEffect(() => {
-    if (sortType) {
-      const sortedData = sortObjects(inStockProducts, sortType.key, sortType.isAscending) || [];
-
-      dispatch({
-        type: ACTION_TYPES.SET_ALL_PRODUCTS,
-        products: sortedData
-      });
-    }
-  }, [sortType]);
-
-  const sortObjects = (array, sortCriteria, isAscending) => {
-    return array?.slice().sort((a, b) => {
-      let val1 = a[sortCriteria];
-      let val2 = b[sortCriteria];
-
-      if (!isAscending) {
-        val1 = val2;
-        val2 = a[sortCriteria];
-      }
-
-      return typeof val1 === 'string' ? val1?.localeCompare(val2) : val1 - val2;
-    });
-  };
-
+const FilterSection = ({ filters, setFilters, layoutTab, setLayoutTab, allCategories = [] }) => {
   const getCategoryOptions = () => {
     const options =
       allCategories.map((category) => ({
@@ -67,36 +21,11 @@ const FilterSection = ({ layoutTab, setLayoutTab, allCategories = [], setFiltere
 
   const handleSearchBarChange = (e) => {
     const text = e.target.value;
-    setSearchInput(text);
-
-    const prefixLowerCase = text.toLowerCase();
-
-    const filteredItems = inStockProducts?.filter((product) => {
-      return (
-        product.name.toLowerCase().startsWith(prefixLowerCase) ||
-        product.categoryTitle.toLowerCase().startsWith(prefixLowerCase) ||
-        product.price.toString().startsWith(prefixLowerCase)
-      );
-    });
-
-    setFilteredProducts(filteredItems);
+    setFilters((prev) => ({ ...prev, searchInput: text }));
   };
 
-  const handleCategoryFilterChange = (e) => {
-    setCategoryFilter(e);
-
-    if (e.value === 'ALL') {
-      setFilteredProducts(inStockProducts);
-      return;
-    }
-
-    const prefixLowerCase = e.value;
-
-    const filteredItems = inStockProducts?.filter((product) => {
-      return product.categoryType === prefixLowerCase;
-    });
-
-    setFilteredProducts(filteredItems);
+  const handleSelectFilterChange = (key, e) => {
+    setFilters((prev) => ({ ...prev, [key]: e }));
   };
 
   const renderSearchBar = () => (
@@ -104,7 +33,7 @@ const FilterSection = ({ layoutTab, setLayoutTab, allCategories = [], setFiltere
       <input
         type="text"
         placeholder="Search here"
-        value={searchInput}
+        value={filters.searchInput}
         autoComplete="off"
         onChange={handleSearchBarChange}
         className="pl-5 h-8 text-lg w-full focus:text-gray-600 font-semibold focus:bg-white text-white rounded-full ml-[4px] outline-none flex-grow mr-2 pr-2 bg-transparent"
@@ -113,27 +42,31 @@ const FilterSection = ({ layoutTab, setLayoutTab, allCategories = [], setFiltere
     </div>
   );
 
+  const renderSelectFilters = () => (
+    <div className="flex items-center gap-[15px] bg-gray-800 p-2 rounded-md">
+      <p className="text-xl text-white font-semibold pl-[10px]">Sort By - </p>
+      <Select
+        options={SORTING_OPTIONS}
+        value={filters.sortType}
+        onChange={(e) => handleSelectFilterChange('sortType', e)}
+        className="w-[250px] font-semibold"
+      />
+
+      <Select
+        options={getCategoryOptions()}
+        value={filters.categoryFilter}
+        onChange={(e) => handleSelectFilterChange('categoryFilter', e)}
+        className="w-[250px]"
+        placeholder="Select Category"
+      />
+    </div>
+  );
+
   return (
     <div className="pt-[50px] px-[135px] flex w-full relative justify-between items-center">
       {renderSearchBar()}
       <div className="flex-grow flex justify-end gap-[40px]">
-        <div className="flex items-center gap-[15px] bg-gray-800 p-2 rounded-md">
-          <p className="text-xl text-white font-semibold pl-[10px]">Sort By - </p>
-          <Select
-            options={sortingOptions}
-            value={sortType}
-            onChange={(e) => setSortType(e)}
-            className="w-[250px] font-semibold"
-          />
-
-          <Select
-            options={getCategoryOptions()}
-            value={categoryFilter}
-            onChange={handleCategoryFilterChange}
-            className="w-[250px]"
-            placeholder="Select Category"
-          />
-        </div>
+        {renderSelectFilters()}
         <TabsButton tabs={tabs} value={layoutTab} />
       </div>
     </div>

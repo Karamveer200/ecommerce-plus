@@ -15,16 +15,9 @@ import Cart from './components/shared/Cart/Cart';
 import { ACTION_TYPES } from './utils/constants';
 
 const App = () => {
-  const [, dispatch] = useProductsGlobalValue();
+  const [state, dispatch] = useProductsGlobalValue();
 
-  const { isAllProductsFetching } = useGetAllProducts({
-    onSuccess: (products) => {
-      dispatch({
-        type: ACTION_TYPES.SET_ALL_PRODUCTS,
-        products
-      });
-    }
-  });
+  const { allProducts, isAllProductsFetching } = useGetAllProducts();
 
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useContext(UserContext);
 
@@ -33,6 +26,14 @@ const App = () => {
   useEffect(() => {
     scrollToTop();
   }, [pathname]);
+
+  useEffect(() => {
+    if (allProducts)
+      dispatch({
+        type: ACTION_TYPES.SET_ALL_PRODUCTS,
+        products: allProducts
+      });
+  }, [allProducts]);
 
   const deleteAccessToken = () => {
     delete api.defaults.headers.common[API_HEADER_KEYS.AUTHORIZATION];
@@ -60,10 +61,10 @@ const App = () => {
 
   const isLoadingScreen = isAllProductsFetching || isLoading;
 
+  if (isLoadingScreen) return <FallbackLoader />;
+
   return (
     <div>
-      {isLoadingScreen && <FallbackLoader isTransparent />}
-
       <ToastWrapper />
       <Header />
       <Cart />

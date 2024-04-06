@@ -2,6 +2,6 @@ import api from './api';
 
 const BASE_PATH = '/products';
 
-export const getAllProducts = () => {
-  return api.get(`${BASE_PATH}/all`).then((res) => res.data);
+export const getAllProducts = ({ signal, params }) => {
+  return api.get(`${BASE_PATH}/all`, { signal, params }).then((res) => res.data);
 };
