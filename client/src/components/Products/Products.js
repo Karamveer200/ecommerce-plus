@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useState, useEffect } from 'react';
 import FilterSection from './FilterSection/FilterSection';
 import { useProductsGlobalValue } from '../../store/StateProvider';
+import { useGetAllCategories } from '../../hooks/useGetAllCategories';
 
 export const PRODUCTS_TABS_TYPE = {
   GRID: 0,
@@ -11,7 +12,8 @@ export const PRODUCTS_TABS_TYPE = {
 
 const ProductsList = () => {
   const [{ inStockProducts, basket }] = useProductsGlobalValue();
-  console.log('basket', basket);
+  const { allCategories, isAllCategoriesFetching } = useGetAllCategories();
+
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const [layoutTab, setLayoutTab] = useState(PRODUCTS_TABS_TYPE.LIST);
@@ -65,6 +67,7 @@ const ProductsList = () => {
           layoutTab={layoutTab}
           setLayoutTab={setLayoutTab}
           setFilteredProducts={setFilteredProducts}
+          allCategories={allCategories}
         />
 
         {renderProducts()}

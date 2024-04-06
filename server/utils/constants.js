@@ -11,7 +11,7 @@ const NODE_ENVS = {
   production: 'production',
 };
 
-const MAPPER_NAMESPACES = { products: 'products' };
+const MAPPER_NAMESPACES = { products: 'products', categories: 'categories' };
 
 const QUERIES = {
   getAllProductsWithCategories: 'getAllProductsWithCategories',

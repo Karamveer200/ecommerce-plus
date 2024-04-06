@@ -20,7 +20,19 @@ const formatGetAllProducts = (rows) =>
     return acc;
   }, []);
 
+const formatGetAllCategories = (rows) =>
+  rows.reduce((acc, item) => {
+    acc.push({
+      id: item.category_id,
+      title: item.title,
+      type: item.type,
+    });
+
+    return acc;
+  }, []);
+
 module.exports = {
   getDynamicEnv,
   formatGetAllProducts,
+  formatGetAllCategories,
 };

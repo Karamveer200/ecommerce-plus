@@ -17,6 +17,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 app.use('/api/products', require('./routes/products'));
+app.use('/api/categories', require('./routes/categories'));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));

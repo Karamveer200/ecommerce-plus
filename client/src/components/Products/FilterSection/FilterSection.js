@@ -15,24 +15,28 @@ const sortingOptions = [
   { value: 5, key: 'stars', label: 'Stars / Descending', isAscending: false }
 ];
 
-const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
+const CATEGORY_DEFAULT_OPTIONS = { label: 'All', value: 'ALL' };
+
+const FilterSection = ({ layoutTab, setLayoutTab, allCategories = [], setFilteredProducts }) => {
   const [{ inStockProducts }, dispatch] = useProductsGlobalValue();
 
   const [searchInput, setSearchInput] = useState('');
-  const [sortOrder, setSortOrder] = useState(sortingOptions[0]);
+  const [sortType, setSortType] = useState(sortingOptions[0]);
+
+  const [categoryFilter, setCategoryFilter] = useState(CATEGORY_DEFAULT_OPTIONS);
 
   useEffect(() => {
-    if (sortOrder) {
-      const sortedData = sortObjects(inStockProducts, sortOrder.key, sortOrder.isAscending) || [];
+    if (sortType) {
+      const sortedData = sortObjects(inStockProducts, sortType.key, sortType.isAscending) || [];
 
       dispatch({
         type: ACTION_TYPES.SET_ALL_PRODUCTS,
         products: sortedData
       });
     }
-  }, [sortOrder]);
+  }, [sortType]);
 
-  function sortObjects(array, sortCriteria, isAscending) {
+  const sortObjects = (array, sortCriteria, isAscending) => {
     return array?.slice().sort((a, b) => {
       let val1 = a[sortCriteria];
       let val2 = b[sortCriteria];
@@ -44,7 +48,17 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
 
       return typeof val1 === 'string' ? val1?.localeCompare(val2) : val1 - val2;
     });
-  }
+  };
+
+  const getCategoryOptions = () => {
+    const options =
+      allCategories.map((category) => ({
+        label: category.title,
+        value: category.type
+      })) || [];
+
+    return [CATEGORY_DEFAULT_OPTIONS, ...options];
+  };
 
   const tabs = [
     { label: <p>Grid</p>, onClick: () => setLayoutTab(PRODUCTS_TABS_TYPE.GRID) },
@@ -63,6 +77,23 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
         product.categoryTitle.toLowerCase().startsWith(prefixLowerCase) ||
         product.price.toString().startsWith(prefixLowerCase)
       );
+    });
+
+    setFilteredProducts(filteredItems);
+  };
+
+  const handleCategoryFilterChange = (e) => {
+    setCategoryFilter(e);
+
+    if (e.value === 'ALL') {
+      setFilteredProducts(inStockProducts);
+      return;
+    }
+
+    const prefixLowerCase = e.value;
+
+    const filteredItems = inStockProducts?.filter((product) => {
+      return product.categoryType === prefixLowerCase;
     });
 
     setFilteredProducts(filteredItems);
@@ -90,11 +121,17 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
           <p className="text-xl text-white font-semibold pl-[10px]">Sort By - </p>
           <Select
             options={sortingOptions}
-            placeholder="Sort By"
-            isClearable={false}
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e)}
+            value={sortType}
+            onChange={(e) => setSortType(e)}
+            className="w-[250px] font-semibold"
+          />
+
+          <Select
+            options={getCategoryOptions()}
+            value={categoryFilter}
+            onChange={handleCategoryFilterChange}
             className="w-[250px]"
+            placeholder="Select Category"
           />
         </div>
         <TabsButton tabs={tabs} value={layoutTab} />

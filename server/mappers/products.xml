@@ -17,8 +17,4 @@
             shop_zone.CATEGORY AS C 
             ON P.category_id = C.category_id;
     </select>
-    
-    <select id="getAllCategories">
-        SELECT category_id, TITLE, TYPE FROM shop_zone.CATEGORY;
-    </select>     
 </mapper>

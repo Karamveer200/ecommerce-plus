@@ -19,6 +19,11 @@ const productsReducer = (state, action = {}) => {
         allProducts: action.products,
         inStockProducts: action.products?.filter((item) => !!item.quantity)
       };
+    case ACTION_TYPES.SET_IN_STOCK_PRODUCTS:
+      return {
+        ...state,
+        inStockProducts: action.products?.filter((item) => !!item.quantity)
+      };
     case ACTION_TYPES.ADD_TO_BASKET:
       const data = [...state.basket, action.item];
       setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, data);
