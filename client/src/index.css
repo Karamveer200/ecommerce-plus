@@ -51,6 +51,12 @@ body {
   animation-duration: 0.5s;
 }
 
+.fadeInHalfSecondCards {
+  animation: fadeIn ease-in 1;
+  animation-fill-mode: forwards;
+  animation-duration: 0.5s;
+}
+
 .fadeInOneSecond {
   z-index: 1;
   animation: fadeIn ease-in 1;
@@ -94,7 +100,7 @@ body {
 }
 
 .toastStyles {
-  margin-top: 50px !important;
+  margin-top: 80px !important;
 }
 
 .toastStyles > div {

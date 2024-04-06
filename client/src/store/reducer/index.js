@@ -1,38 +1,42 @@
 /* eslint-disable no-case-declarations */
-import { ACTION_TYPES } from '../../utils/constants';
+import { ACTION_TYPES, LOCAL_STORAGE_KEYS } from '../../utils/constants';
+import { getLocalStorageItem, setLocalStorageItem } from '../../utils/helperFunctions';
 
 export const productInitialState = {
   allProducts: [],
-  basket: []
+  inStockProducts: [],
+  basket: getLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET) || []
 };
 
 //Selector
 export const getBasketTotal = (basket) => basket?.reduce((amount, item) => item.price + amount, 0);
 
-const productsReducer = (state, action) => {
+const productsReducer = (state, action = {}) => {
   switch (action.type) {
     case ACTION_TYPES.SET_ALL_PRODUCTS:
       return {
         ...state,
-        allProducts: action.products
+        allProducts: action.products,
+        inStockProducts: action.products?.filter((item) => !!item.quantity)
       };
-    case 'ADD_TO_BASKET':
+    case ACTION_TYPES.ADD_TO_BASKET:
+      const data = [...state.basket, action.item];
+      setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, data);
+
       return {
         ...state,
-        basket: [...state.basket, action.item]
+        basket: data
       };
 
-    case 'REMOVE_FROM_BASKET':
-      const index = state.basket.findIndex((item) => item.id === action.id);
+    case ACTION_TYPES.REMOVER_FROM_BASKET:
       let tempBasket = [...state.basket];
-      if (index >= 0) {
-        tempBasket.splice(index, 1);
-      } else {
-        console.warn(`Can't remove product with id - ${action.id}`);
-      }
+      const filteredBasket = tempBasket.filter((item) => item.id !== action.item?.id);
+
+      setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, filteredBasket);
+
       return {
         ...state,
-        basket: tempBasket
+        basket: filteredBasket
       };
 
     case 'EMPTY_BASKET':

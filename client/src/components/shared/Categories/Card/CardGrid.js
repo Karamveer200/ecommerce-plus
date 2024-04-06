@@ -2,9 +2,11 @@ import Stars from './Stars/Stars';
 import { assetManager } from '../../../../assets/assetManager';
 import StockRemaining from './StockRemaining/StockRemaining';
 
-const CardGrid = ({ item }) => {
+const CardGrid = ({ item, onClick }) => {
   return (
-    <div className="h-[500px] bg-gray-200 group rounded-lg hover:bg-gray-400 transition-all duration-200 ease-linear cursor-pointer shadow-lg">
+    <div
+      className="h-[500px] bg-gray-200 group rounded-lg hover:bg-gray-400 transition-all duration-200 ease-linear cursor-pointer shadow-lg fadeInHalfSecondCards"
+      onClick={() => onClick(item)}>
       <div className="h-[83%] aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-400 xl:aspect-h-8 xl:aspect-w-7">
         <img
           src={assetManager[item.categoryType]?.[item.imageIdentifier] || assetManager.NO_IMAGE}

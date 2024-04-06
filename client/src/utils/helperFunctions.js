@@ -33,3 +33,17 @@ export const convertTimeToMomentFormat = (timeStamp) => {
 
   return { date, time };
 };
+
+export const setLocalStorageItem = (key, data) => {
+  const stringify = JSON.stringify(data);
+  localStorage.setItem(key, stringify);
+};
+
+export const getLocalStorageItem = (key) => {
+  try {
+    const data = JSON.parse(localStorage.getItem(key));
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};

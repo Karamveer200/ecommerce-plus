@@ -8,7 +8,7 @@ const CustomTooltip = styled(({ className, ...props }) => (
     background-color: black;
     font-size: 16px;
     padding: 7px 10px !important;
-    font-family: Montserrat;
+    font-family: Inter;
     border-radius: 8px;
 `);
 

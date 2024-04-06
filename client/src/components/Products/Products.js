@@ -10,15 +10,18 @@ export const PRODUCTS_TABS_TYPE = {
 };
 
 const ProductsList = () => {
-  const [{ allProducts }] = useProductsGlobalValue();
-
+  const [{ inStockProducts, basket }] = useProductsGlobalValue();
+  console.log('basket', basket);
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const [layoutTab, setLayoutTab] = useState(PRODUCTS_TABS_TYPE.LIST);
 
   useEffect(() => {
-    allProducts && setFilteredProducts(allProducts);
-  }, [allProducts]);
+    if (inStockProducts) {
+      const filterInStockItems = inStockProducts.filter((item) => !!item.quantity);
+      setFilteredProducts(filterInStockItems);
+    }
+  }, [inStockProducts]);
 
   const groupedProductAndCategory = useMemo(
     () =>

@@ -16,14 +16,14 @@ const sortingOptions = [
 ];
 
 const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
-  const [{ allProducts }, dispatch] = useProductsGlobalValue();
+  const [{ inStockProducts }, dispatch] = useProductsGlobalValue();
 
   const [searchInput, setSearchInput] = useState('');
   const [sortOrder, setSortOrder] = useState(sortingOptions[0]);
 
   useEffect(() => {
     if (sortOrder) {
-      const sortedData = sortObjects(allProducts, sortOrder.key, sortOrder.isAscending) || [];
+      const sortedData = sortObjects(inStockProducts, sortOrder.key, sortOrder.isAscending) || [];
 
       dispatch({
         type: ACTION_TYPES.SET_ALL_PRODUCTS,
@@ -57,7 +57,7 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
 
     const prefixLowerCase = text.toLowerCase();
 
-    const filteredItems = allProducts?.filter((product) => {
+    const filteredItems = inStockProducts?.filter((product) => {
       return (
         product.name.toLowerCase().startsWith(prefixLowerCase) ||
         product.categoryTitle.toLowerCase().startsWith(prefixLowerCase) ||
@@ -83,7 +83,7 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
   );
 
   return (
-    <div className="pt-[50px] px-[70px] flex w-full relative justify-between items-center">
+    <div className="pt-[50px] px-[135px] flex w-full relative justify-between items-center">
       {renderSearchBar()}
       <div className="flex-grow flex justify-end gap-[40px]">
         <div className="flex items-center gap-[15px] bg-gray-800 p-2 rounded-md">

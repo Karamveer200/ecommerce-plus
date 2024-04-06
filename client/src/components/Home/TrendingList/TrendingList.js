@@ -8,13 +8,13 @@ import { useProductsGlobalValue } from '../../../store/StateProvider';
 import { ALL_ROUTES_PATHS } from '../../../config/routes';
 
 const TrendingList = () => {
-  const [{ allProducts }] = useProductsGlobalValue();
+  const [{ inStockProducts }] = useProductsGlobalValue();
 
   const navigate = useNavigate();
 
   const sortedProductsByStarRanking = useMemo(
-    () => allProducts?.sort((a, b) => b.stars - a.stars) || [],
-    [allProducts]
+    () => inStockProducts?.sort((a, b) => b.stars - a.stars) || [],
+    [inStockProducts]
   );
 
   const getTrendingProducts = () => {

@@ -11,6 +11,7 @@ import { useContext } from 'react';
 import { API_HEADER_KEYS } from './utils/constants';
 import { useProductsGlobalValue } from './store/StateProvider';
 import { useGetAllProducts } from './hooks/useGetAllProducts';
+import Cart from './components/shared/Cart/Cart';
 import { ACTION_TYPES } from './utils/constants';
 
 const App = () => {
@@ -65,6 +66,7 @@ const App = () => {
 
       <ToastWrapper />
       <Header />
+      <Cart />
 
       <div className={`w-full`} style={{ height: '100vh' }}>
         <Suspense fallback={<FallbackLoader />}>
