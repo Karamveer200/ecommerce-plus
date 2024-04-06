@@ -58,7 +58,6 @@ const executeQuery = async (mapperNamespace, sqlId, params = {}) => {
 
     console.log('Query Called ->   ', sql);
     let result = await connection.raw(sql);
-    console.log('Query result ->   ', result?.rows);
 
     return result;
   } catch (error) {

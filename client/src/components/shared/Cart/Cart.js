@@ -23,7 +23,7 @@ const Cart = () => {
       </div>
 
       <SideDrawer isSideModalOpen={showSideModal} onClose={() => setShowSideModal(false)}>
-        <SideModalCart />
+        <SideModalCart setShowSideModal={setShowSideModal} />
       </SideDrawer>
     </div>
   );

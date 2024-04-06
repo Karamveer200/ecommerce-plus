@@ -22,6 +22,9 @@
             <if test="categoryType != ''">
                 AND C.TYPE = #{categoryType}
             </if>
+            <if test="minimumQuantity != ''">
+                AND P.quantity >= #{minimumQuantity}
+            </if>
         ORDER BY 
             <choose>
                 <when test="sortKey != null">
@@ -42,4 +45,13 @@
                 </otherwise>
             </choose>
     </select>
+
+    <update id="updateProductQuantities">
+        <foreach collection="payload" item="item" separator=";">
+            UPDATE shop_zone.PRODUCTS
+            SET quantity = quantity - #{item.purchaseQuantity}
+            WHERE product_id = #{item.id}
+        </foreach>
+    </update>
+
 </mapper>

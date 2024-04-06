@@ -67,7 +67,9 @@ const productsReducer = (state, action = {}) => {
         basket: filteredBasket
       };
     }
-    case 'EMPTY_BASKET': {
+    case ACTION_TYPES.EMPTY_BASKET: {
+      setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, []);
+
       return {
         ...state,
         basket: []

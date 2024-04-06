@@ -4,9 +4,38 @@ import CardListCheckout from '../../Categories/Card/CardListCheckout';
 import { ACTION_TYPES } from '../../../../utils/constants';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import classes from './SideModalCart.module.css';
+import useSubmitOrder from '../../../../hooks/useSubmitOrder';
+import { toast } from 'react-toastify';
+import { useQueryClient } from '@tanstack/react-query';
+import Spinner from '../../Spinner/Spinner';
+import { GET_ALL_PRODUCTS } from '../../../../hooks/useGetAllProducts';
 
-const SideModalCart = () => {
+const SideModalCart = ({ setShowSideModal }) => {
   const [{ basket }, dispatch] = useProductsGlobalValue();
+  const queryClient = useQueryClient();
+
+  const { submitOrder, isSubmitOrderLoading } = useSubmitOrder({
+    onSuccess: () => {
+      toast.success('Order submitted successfully');
+      setShowSideModal(false);
+      dispatch({
+        type: ACTION_TYPES.EMPTY_BASKET
+      });
+      queryClient.invalidateQueries({ queryKey: [GET_ALL_PRODUCTS] });
+    },
+    onError: () => {
+      toast.error('Something went wrong...');
+    }
+  });
+
+  const handleSubmitOrder = () => {
+    const payload = basket.map((item) => ({
+      id: item.id,
+      purchaseQuantity: item.purchaseQuantity
+    }));
+
+    submitOrder(payload);
+  };
 
   const getBasketTotal = (basket) =>
     basket?.reduce((amount, item) => item.purchaseQuantity * item.price + amount, 0);
@@ -52,11 +81,22 @@ const SideModalCart = () => {
       <div className="flex flex-grow items-center px-4">
         <p className="text-white font-semibold text-2xl">Total Price - ${getBasketTotal(basket)}</p>
       </div>
-      <button className="mx-4 bg-indigo-500 hover:bg-indigo-600 transition-all duration-100 ease-in text-white font-semibold text-xl px-6 py-4 rounded-md mb-3">
+      <button
+        className="mx-4 bg-indigo-500 hover:bg-indigo-600 transition-all duration-100 ease-in text-white font-semibold text-xl px-6 py-4 rounded-md mb-3"
+        onClick={handleSubmitOrder}>
         Confirm Order
       </button>
     </div>
   );
+
+  if (isSubmitOrderLoading)
+    return (
+      <div className="bg-gray-900 h-full pl-1 pt-1 pb-2">
+        <div className="bg-gray-300 h-full rounded-lg overflow-hidden">
+          <Spinner center />
+        </div>
+      </div>
+    );
 
   return (
     <div className="bg-gray-900 h-full pl-1 pt-1 pb-2">

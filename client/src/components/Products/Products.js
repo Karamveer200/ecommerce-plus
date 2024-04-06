@@ -35,6 +35,7 @@ const ProductsList = () => {
         searchInput: filters.searchInput,
         sortKey: filters.sortType.key,
         sortOrder: filters.sortType.isAscending ? 'ASC' : 'DESC',
+        minimumQuantity: 1,
         categoryType:
           filters.categoryFilter.value === CATEGORY_DEFAULT_OPTIONS.value
             ? ''
