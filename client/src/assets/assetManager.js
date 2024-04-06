@@ -9,11 +9,11 @@ import hardDrive from './Products/electronics/harddrive.png';
 import mobile from './Products/electronics/mobile.png';
 import speakers from './Products/electronics/speakers.png';
 
-import blackBoots from './Products/shoes/blackBoots.png';
 import blackShoes from './Products/shoes/blackShoes.png';
 import redShoe from './Products/shoes/redShoe.png';
 import whiteSlipper from './Products/shoes/whiteSlipper.png';
 import yellowShoe from './Products/shoes/yellowShoe.png';
+import noImage from './Products/noImage.png';
 
 export const productAssetManager = Object.freeze({
   CLOTHING: {
@@ -33,7 +33,8 @@ export const productAssetManager = Object.freeze({
     RED_SHOE: redShoe,
     WHITE_SLIPPER: whiteSlipper,
     YELLOW_SHOW: yellowShoe
-  }
+  },
+  NO_IMAGE: noImage
 });
 
 export const assetManager = Object.freeze({

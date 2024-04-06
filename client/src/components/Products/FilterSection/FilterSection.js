@@ -1,13 +1,48 @@
 import TabsButton from '../../shared/Button/TabsButton';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PRODUCTS_TABS_TYPE } from '../Products';
 import { useProductsGlobalValue } from '../../../store/StateProvider';
+import Select from 'react-select';
+import { ACTION_TYPES } from '../../../utils/constants';
+
+const sortingOptions = [
+  { value: 0, key: 'name', label: 'Name / Ascending', isAscending: true },
+  { value: 1, key: 'name', label: 'Name / Descending', isAscending: false },
+  { value: 2, key: 'price', label: 'Price / Ascending', isAscending: true },
+  { value: 3, key: 'price', label: 'Price / Descending', isAscending: false }
+];
 
 const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
-  const [{ allProducts }] = useProductsGlobalValue();
+  const [{ allProducts }, dispatch] = useProductsGlobalValue();
 
   const [searchInput, setSearchInput] = useState('');
+  const [sortOrder, setSortOrder] = useState(sortingOptions[0]);
+
+  useEffect(() => {
+    if (sortOrder) {
+      const sortedData = sortObjects(allProducts, sortOrder.key, sortOrder.isAscending) || [];
+
+      dispatch({
+        type: ACTION_TYPES.SET_ALL_PRODUCTS,
+        products: sortedData
+      });
+    }
+  }, [sortOrder]);
+
+  function sortObjects(array, sortCriteria, isAscending) {
+    return array?.slice().sort((a, b) => {
+      let val1 = a[sortCriteria];
+      let val2 = b[sortCriteria];
+
+      if (!isAscending) {
+        val1 = val2;
+        val2 = a[sortCriteria];
+      }
+
+      return typeof val1 === 'string' ? val1?.localeCompare(val2) : val1 - val2;
+    });
+  }
 
   const tabs = [
     { label: <p>Grid</p>, onClick: () => setLayoutTab(PRODUCTS_TABS_TYPE.GRID) },
@@ -28,7 +63,6 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
       );
     });
 
-    console.log('filteredItems', filteredItems);
     setFilteredProducts(filteredItems);
   };
 
@@ -47,9 +81,22 @@ const FilterSection = ({ layoutTab, setLayoutTab, setFilteredProducts }) => {
   );
 
   return (
-    <div className="pt-[50px] px-[70px] flex w-full relative">
+    <div className="pt-[50px] px-[70px] flex w-full relative justify-between items-center">
       {renderSearchBar()}
-      <TabsButton tabs={tabs} value={layoutTab} className="absolute -bottom-[6px] right-[70px]" />
+      <div className="flex-grow flex justify-end gap-[40px]">
+        <div className="flex items-center gap-[15px] bg-gray-800 p-2 rounded-md">
+          <p className="text-xl text-white font-semibold pl-[10px]">Sort By - </p>
+          <Select
+            options={sortingOptions}
+            placeholder="Sort By"
+            isClearable={false}
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e)}
+            className="w-[250px]"
+          />
+        </div>
+        <TabsButton tabs={tabs} value={layoutTab} />
+      </div>
     </div>
   );
 };
