@@ -8,32 +8,55 @@ export const productInitialState = {
   basket: getLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET) || []
 };
 
-//Selector
-export const getBasketTotal = (basket) => basket?.reduce((amount, item) => item.price + amount, 0);
-
 const productsReducer = (state, action = {}) => {
   switch (action.type) {
-    case ACTION_TYPES.SET_ALL_PRODUCTS:
+    case ACTION_TYPES.SET_ALL_PRODUCTS: {
       return {
         ...state,
         allProducts: action.products,
         inStockProducts: action.products?.filter((item) => !!item.quantity)
       };
-    case ACTION_TYPES.SET_IN_STOCK_PRODUCTS:
-      return {
-        ...state,
-        inStockProducts: action.products?.filter((item) => !!item.quantity)
-      };
-    case ACTION_TYPES.ADD_TO_BASKET:
-      const data = [...state.basket, action.item];
+    }
+    case ACTION_TYPES.ADD_TO_BASKET: {
+      const item = { ...action.item, purchaseQuantity: 1 };
+      const data = [...state.basket, item];
+
       setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, data);
 
       return {
         ...state,
         basket: data
       };
+    }
+    case ACTION_TYPES.ADD_QUANTITY: {
+      const updatedQuantity = action.item.purchaseQuantity + 1;
 
-    case ACTION_TYPES.REMOVER_FROM_BASKET:
+      if (updatedQuantity > action.item.quantity) return state;
+
+      const item = { ...action.item, purchaseQuantity: updatedQuantity };
+      const data = state.basket.map((product) => (product.id === item.id ? item : product));
+
+      setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, data);
+
+      return {
+        ...state,
+        basket: data
+      };
+    }
+    case ACTION_TYPES.REMOVE_QUANTITY: {
+      if (action.item.purchaseQuantity < 2) return state;
+
+      const item = { ...action.item, purchaseQuantity: action.item.purchaseQuantity - 1 };
+      const data = state.basket.map((product) => (product.id === item.id ? item : product));
+
+      setLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET, data);
+
+      return {
+        ...state,
+        basket: data
+      };
+    }
+    case ACTION_TYPES.REMOVER_FROM_BASKET: {
       let tempBasket = [...state.basket];
       const filteredBasket = tempBasket.filter((item) => item.id !== action.item?.id);
 
@@ -43,13 +66,16 @@ const productsReducer = (state, action = {}) => {
         ...state,
         basket: filteredBasket
       };
-
-    case 'EMPTY_BASKET':
+    }
+    case 'EMPTY_BASKET': {
       return {
         ...state,
         basket: []
       };
-    default:
+    }
+    default: {
+      return state;
+    }
   }
 };
 

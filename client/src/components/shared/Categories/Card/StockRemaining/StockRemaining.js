@@ -1,7 +1,7 @@
 const StockRemaining = ({ count = 0 }) => {
   const renderCount = (label, countClassName) => (
     <>
-      <p>{label}</p>
+      <p className="text-lg xl:text-xl">{label}</p>
       <p>-</p>
       <p
         className={`w-8 h-8 flex font-semibold justify-center items-center rounded-full text-white ${countClassName}`}>

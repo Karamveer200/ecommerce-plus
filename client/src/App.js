@@ -15,7 +15,7 @@ import Cart from './components/shared/Cart/Cart';
 import { ACTION_TYPES } from './utils/constants';
 
 const App = () => {
-  const [state, dispatch] = useProductsGlobalValue();
+  const [, dispatch] = useProductsGlobalValue();
 
   const { allProducts, isAllProductsFetching } = useGetAllProducts();
 

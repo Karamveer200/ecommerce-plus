@@ -14,7 +14,7 @@ const ToastWrapper = () => {
       draggable
       pauseOnHover
       theme="dark"
-      className="text-xs sm:text-sm toastStyles"
+      className="text-xs sm:text-lg toastStyles"
     />
   );
 };

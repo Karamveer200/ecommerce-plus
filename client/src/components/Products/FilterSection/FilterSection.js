@@ -2,8 +2,12 @@ import TabsButton from '../../shared/Button/TabsButton';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid';
 import { PRODUCTS_TABS_TYPE, SORTING_OPTIONS, CATEGORY_DEFAULT_OPTIONS } from '../Products';
 import Select from 'react-select';
+import { useState } from 'react';
+import { debounce } from 'lodash';
 
 const FilterSection = ({ filters, setFilters, layoutTab, setLayoutTab, allCategories = [] }) => {
+  const [localSearchInput, setLocalSearchInput] = useState('');
+
   const getCategoryOptions = () => {
     const options =
       allCategories.map((category) => ({
@@ -19,9 +23,13 @@ const FilterSection = ({ filters, setFilters, layoutTab, setLayoutTab, allCatego
     { label: <p>List</p>, onClick: () => setLayoutTab(PRODUCTS_TABS_TYPE.LIST) }
   ];
 
-  const handleSearchBarChange = (e) => {
-    const text = e.target.value;
+  const debounceSearchFilter = debounce((text) => {
     setFilters((prev) => ({ ...prev, searchInput: text }));
+  }, 300);
+
+  const handleSearchBarChange = (val) => {
+    setLocalSearchInput(val);
+    debounceSearchFilter(val);
   };
 
   const handleSelectFilterChange = (key, e) => {
@@ -33,9 +41,9 @@ const FilterSection = ({ filters, setFilters, layoutTab, setLayoutTab, allCatego
       <input
         type="text"
         placeholder="Search here"
-        value={filters.searchInput}
+        value={localSearchInput}
         autoComplete="off"
-        onChange={handleSearchBarChange}
+        onChange={(e) => handleSearchBarChange(e.target.value)}
         className="pl-5 h-8 text-lg w-full focus:text-gray-600 font-semibold focus:bg-white text-white rounded-full ml-[4px] outline-none flex-grow mr-2 pr-2 bg-transparent"
       />
       <MagnifyingGlassIcon className="hidden lg:inline-flex h-10 bg-blue-500 hover:bg-blue-400 text-white rounded-full p-2 cursor-pointer" />

@@ -6,9 +6,10 @@ const CustomTooltip = styled(({ className, ...props }) => (
 ))(`
     color: white;
     background-color: black;
+    border: 2px solid white;
     font-size: 16px;
     padding: 7px 10px !important;
-    font-family: Inter;
+    font-family: Inter !important;
     border-radius: 8px;
 `);
 

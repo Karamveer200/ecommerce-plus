@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="products">  
-    <select id="getAllProductsWithCategories">
+    <select id="getFilteredProductsWithCategories" resultMap="productResultMap">
         SELECT 
             P.product_id, 
             P.name AS product_name,
@@ -15,6 +15,31 @@
             shop_zone.PRODUCTS AS P
         JOIN 
             shop_zone.CATEGORY AS C 
-            ON P.category_id = C.category_id;
+            ON P.category_id = C.category_id
+        WHERE 
+            (LOWER(P.name) LIKE CONCAT('%', LOWER(#{searchInput}), '%') OR
+            LOWER(C.TITLE) LIKE CONCAT('%', LOWER(#{searchInput}), '%'))
+            <if test="categoryType != ''">
+                AND C.TYPE = #{categoryType}
+            </if>
+        ORDER BY 
+            <choose>
+                <when test="sortKey != null">
+                    <trim prefix=" " suffix=" ">
+                        <!-- Check if sortOrder is 'ASC' or 'DESC', default to 'ASC' if not specified -->
+                        <choose>
+                            <when test="sortOrder == 'DESC'">
+                                <![CDATA[${sortKey} DESC]]>
+                            </when>
+                            <otherwise>
+                                <![CDATA[${sortKey} ASC]]>
+                            </otherwise>
+                        </choose>
+                    </trim>
+                </when>
+                <otherwise>
+                    product_name ASC
+                </otherwise>
+            </choose>
     </select>
 </mapper>

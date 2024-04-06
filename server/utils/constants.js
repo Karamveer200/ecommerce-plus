@@ -14,7 +14,7 @@ const NODE_ENVS = {
 const MAPPER_NAMESPACES = { products: 'products', categories: 'categories' };
 
 const QUERIES = {
-  getAllProductsWithCategories: 'getAllProductsWithCategories',
+  getFilteredProductsWithCategories: 'getFilteredProductsWithCategories',
   getAllCategories: 'getAllCategories',
 };
 

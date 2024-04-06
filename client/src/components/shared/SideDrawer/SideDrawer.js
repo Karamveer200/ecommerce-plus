@@ -9,7 +9,7 @@ const SideDrawer = ({ isSideModalOpen, onClose, children }) => {
       open={isSideModalOpen}
       onClose={onClose}
       transitionDuration={400}
-      PaperProps={{ style: { width: '550px' } }}
+      PaperProps={{ style: { width: '650px' } }}
       className={`${classes.root} `}>
       <>{children}</>
     </Drawer>

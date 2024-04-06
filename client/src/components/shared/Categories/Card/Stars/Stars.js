@@ -8,7 +8,7 @@ const Stars = ({ count = 0 }) => {
       {totalStarsArr.map((star, index) => (
         <StarIcon
           key={index}
-          className={`h-7  ${index < count ? 'text-yellow-400' : 'text-gray-200'}`}
+          className={`h-5  ${index < count ? 'text-yellow-400' : 'text-gray-200'}`}
         />
       ))}
     </div>

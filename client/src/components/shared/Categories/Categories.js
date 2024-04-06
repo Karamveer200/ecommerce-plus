@@ -3,8 +3,11 @@ import { useProductsGlobalValue } from '../../../store/StateProvider';
 import CardList from './Card/CardList';
 import { toast } from 'react-toastify';
 import { ACTION_TYPES } from '../../../utils/constants';
+import Skeleton from '@mui/material/Skeleton';
 
-const Categories = ({ label, products = [], isGridView = true }) => {
+const Categories = ({ label, products = [], isGridView = true, isLoading }) => {
+  const DUMMY_SKELETON_LOADING_ = Array(10).fill(0);
+
   const [{ basket }, dispatch] = useProductsGlobalValue();
 
   const handleAddProductToCart = (item, isItemInBasket) => {
@@ -29,9 +32,18 @@ const Categories = ({ label, products = [], isGridView = true }) => {
     <>
       <p className="text-gray-800 font-bold text-4xl">{label}</p>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-[25px] md:gap-[35px] 2xl:gap-[40px]">
-        {products.map((item) => (
-          <CardGrid key={item.id} item={item} onClick={handleAddProductToCart} basket={basket} />
-        ))}
+        {isLoading
+          ? DUMMY_SKELETON_LOADING_.map((item, index) => (
+              <Skeleton key={index} varian="pulse" height={50} />
+            ))
+          : products.map((item) => (
+              <CardGrid
+                key={item.id}
+                item={item}
+                onClick={handleAddProductToCart}
+                basket={basket}
+              />
+            ))}
       </div>
     </>
   );
@@ -40,15 +52,19 @@ const Categories = ({ label, products = [], isGridView = true }) => {
     <>
       <p className="text-gray-800 font-bold text-3xl">{label}</p>
       <div className="grid grid-rows-1 gap-[15px] 2xl:gap-[20px]">
-        {products.map((item) => (
-          <CardList
-            key={item.id}
-            item={item}
-            onClick={handleAddProductToCart}
-            onDeleteClick={handleDeleteProductFromCart}
-            basket={basket}
-          />
-        ))}
+        {isLoading
+          ? DUMMY_SKELETON_LOADING_.map((item, index) => (
+              <Skeleton key={index} varian="pulse" height={50} />
+            ))
+          : products.map((item) => (
+              <CardList
+                key={item.id}
+                item={item}
+                onClick={handleAddProductToCart}
+                onDelete={handleDeleteProductFromCart}
+                basket={basket}
+              />
+            ))}
       </div>
     </>
   );

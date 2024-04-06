@@ -4,6 +4,7 @@ import { useState } from 'react';
 import FilterSection from './FilterSection/FilterSection';
 import { useGetAllCategories } from '../../hooks/useGetAllCategories';
 import { useGetAllProducts } from '../../hooks/useGetAllProducts';
+import NoDataFound from '../shared/NoDataFound/NoDataFound';
 
 export const PRODUCTS_TABS_TYPE = {
   GRID: 0,
@@ -27,19 +28,19 @@ const ProductsList = () => {
     sortType: SORTING_OPTIONS[0],
     categoryFilter: CATEGORY_DEFAULT_OPTIONS
   });
-  console.log('filters', filters);
 
-  const { allProducts: filteredProducts, isAllProductsFetching } = useGetAllProducts({
-    params: {
-      searchInput: filters.searchInput,
-      sortKey: filters.sortType.key,
-      sortOrder: filters.sortType.isAscending ? 'ASC' : 'DESC',
-      categoryType:
-        filters.categoryFilter.value === CATEGORY_DEFAULT_OPTIONS.value
-          ? ''
-          : filters.categoryFilter.value
-    }
-  });
+  const { allProducts: filteredProducts, isAllProductsFetching: isFilteredProductsFetching } =
+    useGetAllProducts({
+      params: {
+        searchInput: filters.searchInput,
+        sortKey: filters.sortType.key,
+        sortOrder: filters.sortType.isAscending ? 'ASC' : 'DESC',
+        categoryType:
+          filters.categoryFilter.value === CATEGORY_DEFAULT_OPTIONS.value
+            ? ''
+            : filters.categoryFilter.value
+      }
+    });
 
   const { allCategories, isAllCategoriesFetching } = useGetAllCategories();
 
@@ -61,6 +62,17 @@ const ProductsList = () => {
   const renderProducts = () => {
     const categories = Object.keys(groupedProductAndCategory || {});
 
+    const isLoading = isFilteredProductsFetching || isAllCategoriesFetching;
+
+    if (isLoading) {
+      return (
+        <Categories
+          isGridView={layoutTab === PRODUCTS_TABS_TYPE.GRID}
+          isLoading={isFilteredProductsFetching || isAllCategoriesFetching}
+        />
+      );
+    }
+
     return (
       <div
         className={`pt-[40px] flex flex-col ${
@@ -68,20 +80,26 @@ const ProductsList = () => {
             ? 'gap-[80px] md:gap-[120px]'
             : 'gap-[50px] md:gap-[70px]'
         }`}>
-        {categories?.map((category, index) => (
-          <Categories
-            key={index}
-            label={category}
-            products={groupedProductAndCategory[category]}
-            isGridView={layoutTab === PRODUCTS_TABS_TYPE.GRID}
-          />
-        ))}
+        {filteredProducts?.length ? (
+          categories?.map((category, index) => (
+            <Categories
+              key={index}
+              label={category}
+              products={groupedProductAndCategory[category]}
+              isGridView={layoutTab === PRODUCTS_TABS_TYPE.GRID}
+            />
+          ))
+        ) : (
+          <div className="w-full mt-[20px]">
+            <NoDataFound />
+          </div>
+        )}
       </div>
     );
   };
 
   return (
-    <div className="relative z-10 bg-gray-100 pb-[100px]">
+    <div className="relative z-10 bg-gray-100 pb-[100px] ">
       <div className="mt-[80px]">
         <FilterSection
           layoutTab={layoutTab}
