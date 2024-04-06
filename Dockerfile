@@ -22,7 +22,7 @@ COPY server/package*.json ./server/
 RUN cd server && npm install
 
 # Copy the built React app from the previous stage
-COPY --from=build-stage /app/client/build ./server/client/build
+COPY --from=build-stage /app/client/build ./client/build
 
 # Copy the rest of the server code
 COPY server/ ./server/
@@ -32,5 +32,9 @@ ENV NODE_ENV=production
 
 EXPOSE 3000
 
-# Use CMD to run your server, you might need to adjust the path and command
-CMD ["node", "server/server.js"]
+# Change working directory to the server directory
+WORKDIR /app/server
+
+# Your start command here
+CMD ["npm", "run", "server"]
+

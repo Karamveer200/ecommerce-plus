@@ -18,6 +18,12 @@ This command builds react client, node server and postgres server. Once the buil
 
 [http://localhost:3000](http://localhost:3000)
 
+Stop Docker
+
+```
+docker compose down -v
+```
+
 ### Running Locally
 
 After clone, make sure your terminal is in root folder.
@@ -40,8 +46,10 @@ npm run dev
 
 ## Running Backend
 
+Open new terminal
+
 ```
-cd client
+cd server
 ```
 
 For first time users -
