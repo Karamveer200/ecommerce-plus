@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const path = require('path');
-const configurations = require('./config/index');
-const { initializePgConnection, loadBatisMappers, closePool } = require('./utils/database/database');
+const configurations = require('./src/config/index');
+const { initializePgConnection, loadBatisMappers, closePool } = require('./src/utils/database/database');
 
 loadBatisMappers();
 initializePgConnection();
@@ -16,8 +16,8 @@ app.get('/api/health', async (req, res) => {
   res.send(`Node app is running on ${configurations.NODE_ENV} environment`);
 });
 
-app.use('/api/products', require('./routes/products'));
-app.use('/api/categories', require('./routes/categories'));
+app.use('/api/products', require('./src/routes/products'));
+app.use('/api/categories', require('./src/routes/categories'));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '..', 'client', 'build')));

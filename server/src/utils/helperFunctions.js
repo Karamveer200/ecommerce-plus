@@ -1,9 +1,5 @@
 require('dotenv').config();
 
-const getDynamicEnv = async (key) => {
-  return key;
-};
-
 const formatGetAllProducts = (rows) =>
   rows.reduce((acc, item) => {
     acc.push({
@@ -31,8 +27,22 @@ const formatGetAllCategories = (rows) =>
     return acc;
   }, []);
 
+const getFilteredProductsParams = ({
+  searchInput = '',
+  sortKey = 'name',
+  sortOrder = 'ASC',
+  categoryType = '',
+  minimumQuantity = 0,
+}) => ({
+  searchInput,
+  sortKey,
+  sortOrder,
+  categoryType,
+  minimumQuantity,
+});
+
 module.exports = {
-  getDynamicEnv,
   formatGetAllProducts,
   formatGetAllCategories,
+  getFilteredProductsParams,
 };
