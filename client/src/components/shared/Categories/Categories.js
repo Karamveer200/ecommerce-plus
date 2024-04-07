@@ -23,7 +23,7 @@ const Categories = ({ label, products = [], isGridView = true, isLoading }) => {
 
   const handleDeleteProductFromCart = (item) => {
     dispatch({
-      type: ACTION_TYPES.REMOVER_FROM_BASKET,
+      type: ACTION_TYPES.REMOVE_FROM_BASKET,
       item
     });
   };

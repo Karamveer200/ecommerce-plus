@@ -9,16 +9,9 @@ import { ALL_ROUTES } from './config/routes';
 import { UserContext } from './context/UserContext';
 import { useContext } from 'react';
 import { API_HEADER_KEYS } from './utils/constants';
-import { useProductsGlobalValue } from './store/StateProvider';
-import { useGetAllProducts } from './hooks/useGetAllProducts';
 import Cart from './components/shared/Cart/Cart';
-import { ACTION_TYPES } from './utils/constants';
 
 const App = () => {
-  const [, dispatch] = useProductsGlobalValue();
-
-  const { allProducts, isAllProductsFetching } = useGetAllProducts();
-
   const { isAuthenticated, isLoading, getAccessTokenSilently } = useContext(UserContext);
 
   const { pathname } = useLocation();
@@ -26,14 +19,6 @@ const App = () => {
   useEffect(() => {
     scrollToTop();
   }, [pathname]);
-
-  useEffect(() => {
-    if (allProducts)
-      dispatch({
-        type: ACTION_TYPES.SET_ALL_PRODUCTS,
-        products: allProducts
-      });
-  }, [allProducts]);
 
   const deleteAccessToken = () => {
     delete api.defaults.headers.common[API_HEADER_KEYS.AUTHORIZATION];
@@ -59,7 +44,7 @@ const App = () => {
     }
   }, [isAuthenticated]);
 
-  const isLoadingScreen = isAllProductsFetching || isLoading;
+  const isLoadingScreen = isLoading;
 
   if (isLoadingScreen) return <FallbackLoader />;
 

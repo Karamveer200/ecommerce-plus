@@ -4,29 +4,10 @@ import CardListCheckout from '../../Categories/Card/CardListCheckout';
 import { ACTION_TYPES } from '../../../../utils/constants';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import classes from './SideModalCart.module.css';
-import useSubmitOrder from '../../../../hooks/useSubmitOrder';
-import { toast } from 'react-toastify';
-import { useQueryClient } from '@tanstack/react-query';
 import Spinner from '../../Spinner/Spinner';
-import { GET_ALL_PRODUCTS } from '../../../../hooks/useGetAllProducts';
 
-const SideModalCart = ({ setShowSideModal }) => {
+const SideModalCart = ({ submitOrder, isSubmitOrderLoading }) => {
   const [{ basket }, dispatch] = useProductsGlobalValue();
-  const queryClient = useQueryClient();
-
-  const { submitOrder, isSubmitOrderLoading } = useSubmitOrder({
-    onSuccess: () => {
-      toast.success('Order submitted successfully');
-      setShowSideModal(false);
-      dispatch({
-        type: ACTION_TYPES.EMPTY_BASKET
-      });
-      queryClient.invalidateQueries({ queryKey: [GET_ALL_PRODUCTS] });
-    },
-    onError: () => {
-      toast.error('Something went wrong...');
-    }
-  });
 
   const handleSubmitOrder = () => {
     const payload = basket.map((item) => ({
@@ -42,7 +23,7 @@ const SideModalCart = ({ setShowSideModal }) => {
 
   const handleDeleteProductFromCart = (item) => {
     dispatch({
-      type: ACTION_TYPES.REMOVER_FROM_BASKET,
+      type: ACTION_TYPES.REMOVE_FROM_BASKET,
       item
     });
   };

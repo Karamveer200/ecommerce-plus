@@ -1,5 +1,6 @@
 server/node_modules/
 server/build
+server/coverage
 
 client/node_modules
 client/build

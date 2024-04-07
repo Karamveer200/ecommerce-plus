@@ -103,6 +103,7 @@ body {
   margin-top: 80px !important;
   font-family: Inter;
   font-size: 20px;
+  z-index: 1000000000;
 }
 
 .toastStyles > div {

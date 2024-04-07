@@ -32,7 +32,7 @@ const getFilteredProductsParams = ({
   sortKey = 'name',
   sortOrder = 'ASC',
   categoryType = '',
-  minimumQuantity = 0,
+  minimumQuantity = 1,
 }) => ({
   searchInput,
   sortKey,

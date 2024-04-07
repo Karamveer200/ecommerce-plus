@@ -3,20 +3,11 @@ import { ACTION_TYPES, LOCAL_STORAGE_KEYS } from '../../utils/constants';
 import { getLocalStorageItem, setLocalStorageItem } from '../../utils/helperFunctions';
 
 export const productInitialState = {
-  allProducts: [],
-  inStockProducts: [],
   basket: getLocalStorageItem(LOCAL_STORAGE_KEYS.BASKET) || []
 };
 
 const productsReducer = (state, action = {}) => {
   switch (action.type) {
-    case ACTION_TYPES.SET_ALL_PRODUCTS: {
-      return {
-        ...state,
-        allProducts: action.products,
-        inStockProducts: action.products?.filter((item) => !!item.quantity)
-      };
-    }
     case ACTION_TYPES.ADD_TO_BASKET: {
       const item = { ...action.item, purchaseQuantity: 1 };
       const data = [...state.basket, item];
@@ -56,7 +47,7 @@ const productsReducer = (state, action = {}) => {
         basket: data
       };
     }
-    case ACTION_TYPES.REMOVER_FROM_BASKET: {
+    case ACTION_TYPES.REMOVE_FROM_BASKET: {
       let tempBasket = [...state.basket];
       const filteredBasket = tempBasket.filter((item) => item.id !== action.item?.id);
 

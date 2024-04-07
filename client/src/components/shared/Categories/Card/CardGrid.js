@@ -11,7 +11,7 @@ const CardGrid = ({ item, onClick, basket = [] }) => {
       ease-linear cursor-pointer shadow-lg fadeInHalfSecondCards ${
         isItemInBasket && 'bg-green-300 hover:bg-green-300 relative rounded-s-lg'
       }`}
-      onClick={() => onClick(item)}>
+      onClick={() => onClick(item, isItemInBasket)}>
       {isItemInBasket && (
         <div
           className="h-full justify-center items-center absolute
