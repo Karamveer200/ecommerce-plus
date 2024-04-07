@@ -9,8 +9,12 @@ const getFilteredProductsWithCategories = async (params) =>
 const updateProductQuantities = async (params) =>
   await executeQuery(MAPPER_NAMESPACES.products, QUERIES.updateProductQuantities, params);
 
+const getOutOfStockProductId = async (params) =>
+  await executeQuery(MAPPER_NAMESPACES.products, QUERIES.getOutOfStockProductId, params);
+
 module.exports = {
   getFilteredProductsWithCategories,
   getAllCategories,
+  getOutOfStockProductId,
   updateProductQuantities,
 };

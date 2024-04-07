@@ -41,6 +41,7 @@ const getFilteredProductsParams = ({
   minimumQuantity,
 });
 
+
 module.exports = {
   formatGetAllProducts,
   formatGetAllCategories,

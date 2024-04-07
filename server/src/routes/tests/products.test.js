@@ -2,7 +2,7 @@ const express = require('express');
 const supertest = require('supertest');
 const router = require('../products');
 const { executeQuery } = require('../../utils/database/database');
-const { MAPPER_NAMESPACES, QUERIES } = require('../../utils/constants');
+const { MAPPER_NAMESPACES, QUERIES, SERVER_REJECTIONS } = require('../../utils/constants');
 const { getFilteredProductsParams } = require('../../utils/helperFunctions');
 
 jest.mock('../../utils/database/database', () => ({
@@ -151,13 +151,18 @@ describe('GET products/confirmOrder', () => {
     expect(response.status).toBe(200);
     expect(response.text).toBe('ok');
 
-    expect(executeQuery).toHaveBeenCalledTimes(1);
+    expect(executeQuery).toHaveBeenCalledTimes(body.length + 1);
+
+    body.forEach((item) => {
+      expect(executeQuery).toHaveBeenCalledWith(MAPPER_NAMESPACES.products, QUERIES.getOutOfStockProductId, item);
+    });
+
     expect(executeQuery).toHaveBeenCalledWith(MAPPER_NAMESPACES.products, QUERIES.updateProductQuantities, {
       payload: body,
     });
   });
 
-  it('handle errors', async () => {
+  it('handle errors server', async () => {
     executeQuery.mockRejectedValueOnce(new Error());
 
     const response = await supertest(app).post('/confirmOrder');
@@ -166,5 +171,28 @@ describe('GET products/confirmOrder', () => {
     expect(response.text).toBe('Server Error');
 
     expect(executeQuery).toHaveBeenCalledTimes(1);
+  });
+
+  it('handle errors out of stock', async () => {
+    const body = [
+      {
+        id: 1,
+        purchaseQuantity: 10,
+      },
+      {
+        id: 32,
+        purchaseQuantity: 5,
+      },
+    ];
+
+    executeQuery.mockResolvedValueOnce({ rows: ['dummy'] });
+
+    // request endpoint
+    const response = await supertest(app).post('/confirmOrder').send(body);
+
+    expect(executeQuery).toHaveBeenCalledTimes(1);
+
+    expect(response.status).toBe(400);
+    expect(response.text).toBe(SERVER_REJECTIONS.INVALID_QUANTITY);
   });
 });

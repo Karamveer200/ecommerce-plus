@@ -2,14 +2,37 @@ import Scrollbars from 'react-custom-scrollbars-2';
 import { useProductsGlobalValue } from '../../../../store/StateProvider';
 import CardListCheckout from '../../Categories/Card/CardListCheckout';
 import { ACTION_TYPES } from '../../../../utils/constants';
+import { useMemo, useState, useEffect } from 'react';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import classes from './SideModalCart.module.css';
+import { toast } from 'react-toastify';
 import Spinner from '../../Spinner/Spinner';
 
-const SideModalCart = ({ submitOrder, isSubmitOrderLoading }) => {
+const SideModalCart = ({ submitOrder, isSubmitOrderLoading, allProducts }) => {
   const [{ basket }, dispatch] = useProductsGlobalValue();
+  const [outOfStockItems, SetOutOfStockItems] = useState([]);
+
+  useEffect(() => {
+    if (basket?.length && allProducts?.length) {
+      const inStockProducts = new Set(allProducts.map((product) => product.id));
+
+      const outOfStockItems = basket.filter((item) => !inStockProducts.has(item.id));
+
+      SetOutOfStockItems(outOfStockItems);
+    }
+  }, [allProducts, basket]);
+
+  const basketTotal = useMemo(
+    () => basket?.reduce((amount, item) => item.purchaseQuantity * item.price + amount, 0),
+    [basket]
+  );
 
   const handleSubmitOrder = () => {
+    if (outOfStockItems?.length) {
+      toast.error('Some items are out of stock...');
+      return;
+    }
+
     const payload = basket.map((item) => ({
       id: item.id,
       purchaseQuantity: item.purchaseQuantity
@@ -17,9 +40,6 @@ const SideModalCart = ({ submitOrder, isSubmitOrderLoading }) => {
 
     submitOrder(payload);
   };
-
-  const getBasketTotal = (basket) =>
-    basket?.reduce((amount, item) => item.purchaseQuantity * item.price + amount, 0);
 
   const handleDeleteProductFromCart = (item) => {
     dispatch({
@@ -51,6 +71,7 @@ const SideModalCart = ({ submitOrder, isSubmitOrderLoading }) => {
           onDelete={handleDeleteProductFromCart}
           onAddQuantity={handleAddQuantity}
           onRemoveQuantity={handleRemoveQuantity}
+          outOfStockItems={outOfStockItems}
         />
       ))}
     </div>
@@ -60,7 +81,7 @@ const SideModalCart = ({ submitOrder, isSubmitOrderLoading }) => {
     <div className="bg-gray-900 h-full flex flex-col">
       <div className="bg-gray-200 h-[6px]"></div>
       <div className="flex flex-grow items-center px-4">
-        <p className="text-white font-semibold text-2xl">Total Price - ${getBasketTotal(basket)}</p>
+        <p className="text-white font-semibold text-2xl">Total Price - ${basketTotal}</p>
       </div>
       <button
         className="mx-4 bg-indigo-500 hover:bg-indigo-600 transition-all duration-100 ease-in text-white font-semibold text-xl px-6 py-4 rounded-md mb-3"

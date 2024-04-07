@@ -4,10 +4,18 @@ import { assetManager } from '../../../../assets/assetManager';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-const CardListCheckout = ({ item, onDelete, onAddQuantity, onRemoveQuantity }) => {
+const CardListCheckout = ({
+  item,
+  onDelete,
+  onAddQuantity,
+  onRemoveQuantity,
+  outOfStockItems = []
+}) => {
   const isQuantityReducible = item.purchaseQuantity > 1;
   const isMaxQuantityReached = item.purchaseQuantity === item.quantity;
   const itemPrice = item.purchaseQuantity * item.price;
+
+  const isItemOutOfStock = outOfStockItems.find((product) => product.id === item.id);
 
   const renderQuantity = () => (
     <div className="bg-gray-200 h-full justify-center items-center absolute right-[10%] flex flex-grow w-[10%]">
@@ -47,7 +55,9 @@ const CardListCheckout = ({ item, onDelete, onAddQuantity, onRemoveQuantity }) =
 
   return (
     <div
-      className={`h-[120px] w-full bg-gray-800 relative flex rounded-lg fadeInHalfSecondCards border-white border-2`}>
+      className={`h-[120px] w-full bg-gray-800 relative flex rounded-lg fadeInHalfSecondCards border-white border-2 ${
+        isItemOutOfStock && 'border-red-500 border-4'
+      }`}>
       <div
         className={`transition-all duration-200 group ease-linear cursor-pointer flex border-2 border-gray-700 rounded-lg w-full
         }`}>
@@ -76,6 +86,12 @@ const CardListCheckout = ({ item, onDelete, onAddQuantity, onRemoveQuantity }) =
           <TrashIcon className="text-red-500 w-[35px]" />
         </CustomTooltip>
       </div>
+
+      {isItemOutOfStock && (
+        <div className="w-[90%] h-full bg-red-800 p-2 absolute bg-opacity-90 flex items-center justify-center">
+          <p className="text-white font-semibold text-xl">Item is out of stock</p>
+        </div>
+      )}
     </div>
   );
 };

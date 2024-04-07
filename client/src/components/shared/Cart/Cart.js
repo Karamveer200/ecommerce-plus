@@ -8,11 +8,15 @@ import { toast } from 'react-toastify';
 import { useQueryClient } from '@tanstack/react-query';
 import { GET_ALL_PRODUCTS } from '../../../hooks/useGetAllProducts';
 import { ACTION_TYPES } from '../../../utils/constants';
+import { useGetAllProducts } from '../../../hooks/useGetAllProducts';
 
 const Cart = () => {
+  const { allProducts } = useGetAllProducts({});
+
   const queryClient = useQueryClient();
 
   const [showSideModal, setShowSideModal] = useState(false);
+
   const [{ basket }, dispatch] = useProductsGlobalValue();
 
   const { submitOrder, isSubmitOrderLoading } = useSubmitOrder({
@@ -25,8 +29,15 @@ const Cart = () => {
 
       queryClient.invalidateQueries({ queryKey: [GET_ALL_PRODUCTS] });
     },
-    onError: () => {
-      toast.error('Something went wrong...');
+    onError: (error) => {
+      const isItemOutOfStock =
+        error?.response?.status === 400 && error?.response?.data === 'INVALID_QUANTITY';
+
+      if (isItemOutOfStock) {
+        queryClient.invalidateQueries({ queryKey: [GET_ALL_PRODUCTS] });
+
+        toast.error('Some items are out of stock...');
+      } else toast.error('Something went wrong...');
     }
   });
 
@@ -44,7 +55,11 @@ const Cart = () => {
       </div>
 
       <SideDrawer isSideModalOpen={showSideModal} onClose={() => setShowSideModal(false)}>
-        <SideModalCart submitOrder={submitOrder} isSubmitOrderLoading={isSubmitOrderLoading} />
+        <SideModalCart
+          submitOrder={submitOrder}
+          isSubmitOrderLoading={isSubmitOrderLoading}
+          allProducts={allProducts}
+        />
       </SideDrawer>
     </div>
   );
