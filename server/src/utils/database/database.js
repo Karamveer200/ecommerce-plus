@@ -54,7 +54,6 @@ const executeQuery = async (mapperNamespace, sqlId, params = {}) => {
   try {
     const connection = await getDbConnection();
     let sql = await mybatisMapper.getStatement(mapperNamespace, sqlId, params);
-    console.log('BEFORE Called ->   ', sql);
 
     sql = sql?.replace(/(\n|\r|\t)/gm, ' ').trim();
 
