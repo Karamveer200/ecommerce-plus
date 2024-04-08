@@ -5,6 +5,8 @@ const {
 } = require('../services/products');
 
 const { formatGetAllProducts, getFilteredProductsParams } = require('../utils/helperFunctions');
+const { confirmOrderValidation } = require('../utils/validations');
+
 const { SERVER_REJECTIONS } = require('../utils/constants');
 
 const express = require('express');
@@ -26,7 +28,7 @@ router.get('/all', async (req, res) => {
   }
 });
 
-router.post('/confirmOrder', async (req, res) => {
+router.post('/confirmOrder', confirmOrderValidation, async (req, res) => {
   try {
     const payload = req.body;
 

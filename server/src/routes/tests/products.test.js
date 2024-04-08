@@ -126,23 +126,23 @@ describe('GET products/all', () => {
   });
 });
 
-describe('GET products/confirmOrder', () => {
+describe('POST products/confirmOrder positive', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should check confirmOrder', async () => {
-    const body = [
-      {
-        id: 1,
-        purchaseQuantity: 10,
-      },
-      {
-        id: 32,
-        purchaseQuantity: 5,
-      },
-    ];
+  const body = [
+    {
+      id: 1,
+      purchaseQuantity: 10,
+    },
+    {
+      id: 32,
+      purchaseQuantity: 5,
+    },
+  ];
 
+  it('should check confirmOrder', async () => {
     executeQuery.mockResolvedValueOnce();
 
     // request endpoint
@@ -165,7 +165,7 @@ describe('GET products/confirmOrder', () => {
   it('handle errors server', async () => {
     executeQuery.mockRejectedValueOnce(new Error());
 
-    const response = await supertest(app).post('/confirmOrder');
+    const response = await supertest(app).post('/confirmOrder').send(body);
 
     expect(response.status).toBe(500);
     expect(response.text).toBe('Server Error');
@@ -194,5 +194,91 @@ describe('GET products/confirmOrder', () => {
 
     expect(response.status).toBe(400);
     expect(response.text).toBe(SERVER_REJECTIONS.INVALID_QUANTITY);
+  });
+});
+
+describe('POST products/confirmOrder negative', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should check id exists', async () => {
+    const body = [
+      {
+        purchaseQuantity: 1,
+      },
+    ];
+
+    const expectedError = {
+      errors: [
+        {
+          value: {
+            purchaseQuantity: 1,
+          },
+          msg: 'Invalid "id"',
+          param: '[0]',
+          location: 'body',
+        },
+      ],
+    };
+
+    const response = await supertest(app).post('/confirmOrder').send(body);
+
+    expect(response.status).toBe(400);
+    expect(response.text).toBe(JSON.stringify(expectedError));
+  });
+
+  it('should check purchaseQuantity exists', async () => {
+    const body = [
+      {
+        id: 1,
+      },
+    ];
+
+    const expectedError = {
+      errors: [
+        {
+          value: {
+            id: 1,
+          },
+          msg: 'Invalid "purchaseQuantity"',
+          param: '[0]',
+          location: 'body',
+        },
+      ],
+    };
+
+    const response = await supertest(app).post('/confirmOrder').send(body);
+
+    expect(response.status).toBe(400);
+    expect(response.text).toBe(JSON.stringify(expectedError));
+  });
+
+  it('should check purchaseQuantity as number', async () => {
+    const body = [
+      {
+        id: 1,
+        purchaseQuantity: '1',
+      },
+    ];
+
+    const expectedError = {
+      errors: [
+        {
+          value: {
+            id: 1,
+            purchaseQuantity: '1',
+          },
+          msg: 'Invalid "purchaseQuantity"',
+          param: '[0]',
+          location: 'body',
+        },
+      ],
+    };
+
+    const response = await supertest(app).post('/confirmOrder').send(body);
+
+    expect(response.status).toBe(400);
+    expect(response.text).toBe(JSON.stringify(expectedError));
   });
 });
